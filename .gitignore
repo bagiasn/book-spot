@@ -29,3 +29,6 @@ out/
 
 ### VS Code ###
 .vscode/
+
+### CSS framework ###
+/src/main/resources/static/semantic
