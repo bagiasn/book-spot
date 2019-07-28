@@ -1,11 +1,16 @@
 package com.github.bagiasn.bookspot.server.book;
 
-import lombok.Data;
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 
-@Data
+import static com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility.ANY;
+
 @Entity(name = "books")
+@JsonAutoDetect(creatorVisibility = ANY, fieldVisibility = ANY)
 public class Book {
 
     @Id
