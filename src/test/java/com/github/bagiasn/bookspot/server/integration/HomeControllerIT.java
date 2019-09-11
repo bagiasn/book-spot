@@ -14,6 +14,7 @@ import java.net.URL;
 
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -36,7 +37,7 @@ public class HomeControllerIT {
 	public void getHomeResponse() {
 		ResponseEntity<String> response = template.getForEntity(url.toString(),
 				String.class);
-		assertThat(response.getBody(), equalTo("Hello from BookSpot!"));
+		assertTrue(response.getStatusCodeValue() == 200);
 	}
 
 }
