@@ -197,12 +197,12 @@ ALTER TABLE catalog.authors OWNER TO admin;
 --
 
 CREATE TABLE catalog.books (
-    id bigint NOT NULL,
+    id bigserial,
     title character varying(255) NOT NULL,
     frontpage_url character varying(255),
     description character varying(255),
     rating numeric(6,3),
-    isbn character varying(16),
+    isbn character varying(16) NOT NULL UNIQUE,
     publication_date date,
     page_count smallint,
     language character(4),
@@ -220,8 +220,8 @@ ALTER TABLE catalog.books OWNER TO admin;
 --
 
 CREATE TABLE catalog.categories (
-    id bigint NOT NULL,
-    name character varying(255) NOT NULL
+    id bigserial,
+    name character varying(255) NOT NULL UNIQUE
 );
 
 
@@ -232,8 +232,8 @@ ALTER TABLE catalog.categories OWNER TO admin;
 --
 
 CREATE TABLE catalog.publishers (
-    id bigint NOT NULL,
-    name character varying(255) NOT NULL
+    id bigserial,
+    name character varying(255) NOT NULL UNIQUE
 );
 
 
