@@ -180,8 +180,13 @@ SET default_table_access_method = heap;
 --
 
 CREATE TABLE catalog.authors (
-    id bigint NOT NULL,
-    name character varying(255) NOT NULL
+    id bigserial,
+    name character varying(255) NOT NULL,
+    source_id character varying(16) NOT NULL UNIQUE,
+    birth_date character varying(16),
+    death_date character varying(16),
+    location character varying(64),
+    bio character varying(255)
 );
 
 
