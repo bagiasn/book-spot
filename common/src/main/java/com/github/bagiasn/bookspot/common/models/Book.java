@@ -1,7 +1,11 @@
 package com.github.bagiasn.bookspot.common.models;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import org.hibernate.annotations.Type;
+
 import javax.persistence.*;
 import java.sql.Date;
+import java.util.UUID;
 
 @Entity()
 @Table(name = "books", schema = "catalog")
@@ -9,14 +13,21 @@ public class Book {
 
     private long id;
     private String title;
-    private String frontpageUrl;
+    @Column(name = "cover_id")
+    @JsonProperty(value = "cover_id")
+    private long coverId;
     private String description;
     private double rating;
-    private String isbn;
+    @Type(type = "pg-uuid")
+    private UUID isbn;
+    @Column(name = "publication_date")
+    @JsonProperty(value = "publication_date")
     private Date publicationDate;
     private long pageCount;
     private String language;
     private long edition;
+    @Column(name = "author_id")
+    @JsonProperty(value = "author_id")
     private long authorId;
     private long categoryId;
     private long publisherId;
@@ -24,7 +35,8 @@ public class Book {
     public Book() {}
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "books_seq_gen")
+    @SequenceGenerator(name = "books_seq_gen", sequenceName = "catalog.books_id_seq", allocationSize = 1)
     public long getId() {
         return id;
     }
@@ -41,12 +53,12 @@ public class Book {
         this.title = title;
     }
 
-    public String getFrontpageUrl() {
-        return frontpageUrl;
+    public long getCoverId() {
+        return coverId;
     }
 
-    public void setFrontpageUrl(String frontpageUrl) {
-        this.frontpageUrl = frontpageUrl;
+    public void setCoverId(long coverId) {
+        this.coverId = coverId;
     }
 
     public String getDescription() {
@@ -65,11 +77,11 @@ public class Book {
         this.rating = rating;
     }
 
-    public String getIsbn() {
+    public UUID  getIsbn() {
         return isbn;
     }
 
-    public void setIsbn(String isbn) {
+    public void setIsbn(UUID  isbn) {
         this.isbn = isbn;
     }
 
