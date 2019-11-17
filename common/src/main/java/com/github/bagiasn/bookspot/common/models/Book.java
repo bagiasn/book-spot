@@ -22,14 +22,18 @@ public class Book {
     private UUID isbn;
     @Column(name = "publication_date")
     @JsonProperty(value = "publication_date")
-    private Date publicationDate;
+    private String publicationDate;
     private long pageCount;
     private String language;
     private long edition;
     @Column(name = "author_id")
     @JsonProperty(value = "author_id")
     private long authorId;
+    @Column(name = "category_id")
+    @JsonProperty(value = "category_id")
     private long categoryId;
+    @Column(name = "publisher_id")
+    @JsonProperty(value = "publisher_id")
     private long publisherId;
 
     public Book() {}
@@ -85,11 +89,11 @@ public class Book {
         this.isbn = isbn;
     }
 
-    public Date getPublicationDate() {
+    public String getPublicationDate() {
         return publicationDate;
     }
 
-    public void setPublicationDate(Date publicationDate) {
+    public void setPublicationDate(String publicationDate) {
         this.publicationDate = publicationDate;
     }
 
