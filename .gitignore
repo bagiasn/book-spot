@@ -33,3 +33,6 @@ out/
 
 ### CSS framework ###
 /src/main/resources/static/semantic
+
+### Avoid tracking SQL dump
+docker/postgres/init/1-dump.sql
