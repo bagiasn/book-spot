@@ -4,3 +4,10 @@ body {
     line-height: 1.2;
     margin: auto;
 }
+
+footer {
+    display: flex;
+    justify-content: center;
+    padding: 5px;
+    margin-top: 2em;
+}
