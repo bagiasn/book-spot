@@ -20,7 +20,7 @@ $('.container')
     });
 
 function loadBooks(response) {
-    const books = response["_embedded"]["books"];
+    const books = response["content"];
 
     books.forEach(book => {
         let card = document.createElement("div");
@@ -34,21 +34,21 @@ function loadBooks(response) {
         let img = document.createElement("img");
 
         // Add classes
-        card.className = 'card';
+        card.classList.add( 'teal', 'card');
         image.classList.add('ui', 'small', 'centered', 'rounded', 'image');
         content.className = 'content';
         header.className = 'header';
         meta.className = 'meta';
         extra.className = 'extra';
         rating.classList.add('ui', 'star', 'rating');
-        ratingAttr.value = "5";
 
         // Populate element content
         header.innerText = book.title;
         img.src = `http://covers.openlibrary.org/b/id/${book.cover_id}-M.jpg`;
         img.alt = 'Book cover image';
-        meta.innerText = 'Category';
-        extra.innerText = 'Rating:';
+        meta.innerText = book.category_name;
+        extra.innerText = 'Rating: ';
+        ratingAttr.value = book.rating;
 
         // Add element hierarchy
         extra.appendChild(rating);
@@ -63,5 +63,14 @@ function loadBooks(response) {
         // Add to container
         const cards = document.getElementsByClassName('ui five doubling cards')[0];
         cards.appendChild(card);
+
+        initializeRating();
     });
+}
+
+function initializeRating() {
+    $('.ui.star.rating')
+        .rating({
+            maxRating: 5
+        });
 }
