@@ -11,3 +11,8 @@ footer {
     padding: 5px;
     margin-top: 2em;
 }
+
+#banner{
+    display:block;
+    margin:auto;
+}
