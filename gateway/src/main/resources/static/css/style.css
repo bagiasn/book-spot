@@ -16,3 +16,7 @@ footer {
     display:block;
     margin:auto;
 }
+
+.ui.large.menu {
+    margin-top: 0;
+}
