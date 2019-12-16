@@ -26,9 +26,9 @@ public class BooksController {
         this.categoryRepository = catalogRepository;
     }
 
-    @Cacheable("books")
+    @Cacheable(key = "#root.methodName + ':'+ #pageable.getPageNumber()", cacheNames = "books")
     @RequestMapping(value = "/books", method = RequestMethod.GET)
-    public Iterable<Book> get(Pageable pageable) {
+    public Iterable<Book> getBooks(Pageable pageable) {
 
         Iterable<Book> books = bookRepository.findAll(pageable);
 
