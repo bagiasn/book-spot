@@ -61,7 +61,7 @@ function loadBooks(response) {
         card.appendChild(extra);
         rating.setAttributeNode(ratingAttr);
         // Add to container
-        const cards = document.getElementsByClassName('ui five doubling cards')[0];
+        const cards = document.getElementsByClassName('ui five doubling link cards')[0];
         cards.appendChild(card);
 
         initializeRating();
