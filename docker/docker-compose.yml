@@ -9,3 +9,10 @@ services:
       - "5432:5432"
     volumes: 
       - ./postgres/init:/docker-entrypoint-initdb.d
+
+  redis:
+    image: redis:5.0.7-alpine
+    command: ["redis-server", "--appendonly", "yes"]
+    hostname: redis
+    ports:
+      - "6379:6379"
