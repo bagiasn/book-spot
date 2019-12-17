@@ -70,7 +70,7 @@ function loadBooks(response) {
 
 function initializeRating() {
     $('.ui.star.rating')
-        .rating({
+        .rating('disable',{
             maxRating: 5
         });
 }
