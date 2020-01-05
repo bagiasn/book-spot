@@ -4,6 +4,10 @@ $.fn.api.settings.api = {
     'get books' : 'api/catalog/books'
 };
 
+$('.ui.modal')
+    .modal()
+;
+
 $('.container')
     .api({
         action: 'get books',
@@ -56,6 +60,22 @@ function loadBooks(response) {
         content.appendChild(meta);
         image.appendChild(img);
 
+        // Add event listeners
+        card.addEventListener("click", function () {
+            let modalImg = document.getElementById("modal-img");
+            modalImg.src = img.src.replace('-M.', '-L.');
+            let modalDesc = document.getElementById("modal-desc");
+            modalDesc.innerText = book.description;
+            let modalHeader = document.getElementById("modal-header");
+            modalHeader.innerText = header.innerText;
+
+            $('.ui.modal')
+                .modal({
+                    centered: false
+                })
+                .modal('show')
+            ;
+        });
         card.appendChild(image);
         card.appendChild(content);
         card.appendChild(extra);
