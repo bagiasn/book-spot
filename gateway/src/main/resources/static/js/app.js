@@ -34,6 +34,7 @@ function loadBooks(response) {
         let meta = document.createElement("div");
         let rating = document.createElement("div");
         let ratingAttr = document.createAttribute("data-rating");
+        let maxAttr = document.createAttribute("data-max-rating");
         let image = document.createElement("div");
         let img = document.createElement("img");
 
@@ -53,7 +54,7 @@ function loadBooks(response) {
         meta.innerText = book.category_name;
         extra.innerText = 'Rating: ';
         ratingAttr.value = book.rating;
-
+        maxAttr.value = "5";
         // Add element hierarchy
         extra.appendChild(rating);
         content.appendChild(header);
@@ -63,11 +64,14 @@ function loadBooks(response) {
         // Add event listeners
         card.addEventListener("click", function () {
             let modalImg = document.getElementById("modal-img");
-            modalImg.src = img.src.replace('-M.', '-L.');
+            modalImg.src = img.src;
             let modalDesc = document.getElementById("modal-desc");
             modalDesc.innerText = book.description;
             let modalHeader = document.getElementById("modal-header");
             modalHeader.innerText = header.innerText;
+
+            $('.actions .rating')
+                .rating('set rating', rating.getAttribute("data-rating"));
 
             $('.ui.modal')
                 .modal({
@@ -80,17 +84,11 @@ function loadBooks(response) {
         card.appendChild(content);
         card.appendChild(extra);
         rating.setAttributeNode(ratingAttr);
+        rating.setAttributeNode(maxAttr);
         // Add to container
         const cards = document.getElementsByClassName('ui five doubling link cards')[0];
         cards.appendChild(card);
-
-        initializeRating();
     });
-}
 
-function initializeRating() {
-    $('.ui.star.rating')
-        .rating('disable',{
-            maxRating: 5
-        });
+    $('.card .rating').rating('disable');
 }
