@@ -20,3 +20,8 @@ footer {
 .ui.large.menu {
     margin-top: 0;
 }
+
+.actions .rating {
+    float: left;
+    margin-top: 0.4em
+}
