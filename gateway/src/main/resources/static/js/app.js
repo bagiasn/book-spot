@@ -71,7 +71,10 @@ function loadBooks(response) {
             modalHeader.innerText = header.innerText;
 
             $('.actions .rating')
-                .rating('set rating', rating.getAttribute("data-rating"));
+                .rating('set rating', rating.getAttribute("data-rating"))
+                .popup({
+                    on: 'click'
+                });
 
             $('.ui.modal')
                 .modal({
