@@ -1,7 +1,8 @@
 'use strict';
 
 $.fn.api.settings.api = {
-    'get books' : 'api/catalog/books'
+    'get books' : 'api/catalog/books',
+    'rate book' : 'api/catalog/books/{id}'
 };
 
 $('.ui.modal')
@@ -70,10 +71,25 @@ function loadBooks(response) {
             let modalHeader = document.getElementById("modal-header");
             modalHeader.innerText = header.innerText;
 
-            $('.actions .rating')
+            var ratingBar = $('.actions .rating');
+            ratingBar
                 .rating('set rating', rating.getAttribute("data-rating"))
                 .popup({
                     on: 'click'
+                })
+                .rating('setting', 'onRate', function (value) {
+                    ratingBar.api({
+                        action: 'rate book',
+                        on: 'now',
+                        method: 'PATCH',
+                        beforeXHR: (xhr) => {
+                            xhr.setRequestHeader('Content-Type', 'application/json');
+                        },
+                        urlData: {
+                            id: book.id
+                        },
+                        data : JSON.stringify({rating: parseInt(value)})
+                    })
                 });
 
             $('.ui.modal')
