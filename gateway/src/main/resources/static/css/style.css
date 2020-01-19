@@ -9,16 +9,22 @@ footer {
     display: flex;
     justify-content: center;
     padding: 5px;
-    margin-top: 2em;
+    margin-top: 1em;
 }
 
 #banner{
-    display:block;
-    margin:auto;
+    display: block;
+    margin: auto;
+}
+
+#btn-load-more {
+    display: block;
+    margin: 2em auto;
 }
 
 .ui.large.menu {
     margin-top: 0;
+    margin-bottom: 2em;
 }
 
 .actions .rating {

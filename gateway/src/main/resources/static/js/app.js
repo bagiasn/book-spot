@@ -2,12 +2,31 @@
 
 $.fn.api.settings.api = {
     'get books' : 'api/catalog/books',
+    'get page' : 'api/catalog/books?page={numPage}',
     'rate book' : 'api/catalog/books/{id}'
 };
 
 $('.ui.modal')
     .modal()
 ;
+
+$('#btn-load-more')
+    .api({
+        action: 'get page',
+        on: 'click',
+        beforeSend: function(settings) {
+            settings.urlData = {
+                numPage: parseInt(sessionStorage.nextPage)
+            };
+            return settings;
+        },
+        onSuccess: function (response) {
+            loadBooks(response);
+        },
+        onError: function (m) {
+            console.log(m);
+        }
+    });
 
 $('.container')
     .api({
@@ -108,6 +127,8 @@ function loadBooks(response) {
         const cards = document.getElementsByClassName('ui five doubling link cards')[0];
         cards.appendChild(card);
     });
+
+    sessionStorage.nextPage = parseInt(response["number"]) + 1;
 
     $('.card .rating').rating('disable');
 }
