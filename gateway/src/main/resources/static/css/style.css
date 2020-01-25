@@ -1,0 +1,33 @@
+body {
+    width: 60%;
+    min-width: 300px;
+    line-height: 1.2;
+    margin: auto;
+}
+
+footer {
+    display: flex;
+    justify-content: center;
+    padding: 5px;
+    margin-top: 1em;
+}
+
+#banner{
+    display: block;
+    margin: auto;
+}
+
+#btn-load-more {
+    display: block;
+    margin: 2em auto;
+}
+
+.ui.large.menu {
+    margin-top: 0;
+    margin-bottom: 2em;
+}
+
+.actions .rating {
+    float: left;
+    margin-top: 0.4em
+}

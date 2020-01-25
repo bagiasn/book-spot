@@ -1,15 +1,16 @@
 package com.github.bagiasn.bookspot.common.models;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
-import java.sql.Date;
+import java.io.Serializable;
 import java.util.UUID;
 
 @Entity()
 @Table(name = "books", schema = "catalog")
-public class Book {
+public class Book implements Serializable {
 
     private long id;
     private String title;
@@ -35,6 +36,10 @@ public class Book {
     @Column(name = "publisher_id")
     @JsonProperty(value = "publisher_id")
     private long publisherId;
+    @JsonInclude()
+    @JsonProperty(value = "category_name")
+    @Transient
+    private String categoryName;
 
     public Book() {}
 
@@ -143,5 +148,13 @@ public class Book {
 
     public void setPublisherId(long publisherId) {
         this.publisherId = publisherId;
+    }
+    @Transient
+    public String getCategoryName() {
+        return categoryName;
+    }
+    @Transient
+    public void setCategoryName(String categoryName) {
+        this.categoryName = categoryName;
     }
 }

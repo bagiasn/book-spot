@@ -25,6 +25,6 @@ public class DatabaseLoader implements CommandLineRunner {
         book.setCategoryId(1);
         book.setPublisherId(1);
 
-        this.repository.save(book);
+        //this.repository.save(book);
     }
 }
