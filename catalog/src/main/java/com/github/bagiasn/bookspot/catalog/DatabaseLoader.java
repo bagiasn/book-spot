@@ -1,7 +1,7 @@
 package com.github.bagiasn.bookspot.catalog;
 
 import com.github.bagiasn.bookspot.catalog.api.BookRepository;
-import com.github.bagiasn.bookspot.common.models.Book;
+import com.github.bagiasn.bookspot.catalog.models.Book;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;

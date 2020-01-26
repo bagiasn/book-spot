@@ -1,4 +1,4 @@
-package com.github.bagiasn.bookspot.common.models;
+package com.github.bagiasn.bookspot.catalog.models;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
