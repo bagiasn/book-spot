@@ -3,12 +3,51 @@
 $.fn.api.settings.api = {
     'get books' : 'api/catalog/books',
     'get page' : 'api/catalog/books?page={numPage}',
-    'rate book' : 'api/catalog/books/{id}'
+    'rate book' : 'api/catalog/books/{id}',
+    'create user' : 'api/user/users'
 };
 
 $('.ui.modal')
     .modal()
 ;
+
+$('.ui.form.sign-up')
+    .form({
+        fields: {
+            username : ['maxLength[12]', 'empty'],
+            password : ['minLength[6]', 'empty'],
+            email:  ['minLength[3]', 'empty'],
+            first_name: 'maxLength[24]',
+            last_name: 'maxLength[24]'
+        }
+    })
+    .api({
+        action: 'create user',
+        on: 'submit',
+        method: 'POST',
+        beforeSend : function (settings) {
+            settings.data = getFormData();
+            return settings;
+        },
+        beforeXHR: (xhr) => {
+            xhr.setRequestHeader('Content-Type', 'application/json');
+        },
+        onSuccess: function () {
+            $(this).form('clear');
+        },
+        onFailure: function (response) {
+            console.log(response);
+        }
+    });
+
+$('#btn-sign-up').click(function () {
+    $('.ui.modal.sign-up')
+        .modal({
+            centered: false
+        })
+        .modal('show')
+    ;
+});
 
 $('#btn-load-more')
     .api({
@@ -42,6 +81,12 @@ $('.container')
             console.log(errorMessage);
         }
     });
+
+function getFormData() {
+    let formData = new FormData($('.ui.form.sign-up')[0]);
+    console.log(formData);
+    return  JSON.stringify(Object.fromEntries(formData));
+}
 
 function loadBooks(response) {
     const books = response["content"];
@@ -90,7 +135,7 @@ function loadBooks(response) {
             let modalHeader = document.getElementById("modal-header");
             modalHeader.innerText = header.innerText;
 
-            var ratingBar = $('.actions .rating');
+            let ratingBar = $('.actions .rating');
             ratingBar
                 .rating('set rating', rating.getAttribute("data-rating"))
                 .popup({

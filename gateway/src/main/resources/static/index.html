@@ -26,7 +26,7 @@
                 </div>
             </div>
             <div class="item">
-                <div class="ui teal button">Sign up</div>
+                <div class="ui teal button" id="btn-sign-up">Sign up</div>
             </div>
             <div class="item">
                 <div class="ui button">Log-in</div>
@@ -73,6 +73,39 @@
                 </div>
                 <div class="ui black cancel button">Close</div>
             </div>
+        </div>
+    </div>
+    <div class="ui modal sign-up">
+        <i class="close icon"></i>
+        <div class="header">
+            Sign Up
+        </div>
+        <div class="content">
+            <form class="ui form sign-up">
+                <div class="required field">
+                    <label>Email</label>
+                    <input type="email" name="email" placeholder="Email">
+                </div>
+                <div class="required field">
+                    <label>Username</label>
+                    <input type="text" name="username" placeholder="Username">
+                </div>
+                <div class="required field">
+                    <label>Password</label>
+                    <input type="password" name="password" placeholder="Password">
+                </div>
+                <div class="equal width fields">
+                    <div class="field">
+                        <label>First Name</label>
+                        <input type="text" name="first_name" placeholder="First Name">
+                    </div>
+                    <div class="field">
+                        <label>Last Name</label>
+                        <input type="text" name="last_name" placeholder="Last Name">
+                    </div>
+                </div>
+                <div class="fluid ui teal submit button">Submit</div>
+            </form>
         </div>
     </div>
     <button class="ui teal basic button" id = "btn-load-more">
