@@ -1,4 +1,4 @@
-package com.github.bagiasn.bookspot.common.models;
+package com.github.bagiasn.bookspot.catalog.models;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;

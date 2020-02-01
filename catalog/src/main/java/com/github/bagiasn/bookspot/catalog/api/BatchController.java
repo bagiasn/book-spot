@@ -1,7 +1,7 @@
 package com.github.bagiasn.bookspot.catalog.api;
 
-import com.github.bagiasn.bookspot.common.models.Author;
-import com.github.bagiasn.bookspot.common.models.Book;
+import com.github.bagiasn.bookspot.catalog.models.Author;
+import com.github.bagiasn.bookspot.catalog.models.Book;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
