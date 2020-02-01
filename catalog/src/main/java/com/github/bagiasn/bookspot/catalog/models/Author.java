@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "authors", schema = "catalog")
+@Table(name = "authors")
 public class Author {
 
     private long id;
@@ -25,7 +25,7 @@ public class Author {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "authors_seq_gen")
-    @SequenceGenerator(name = "authors_seq_gen", sequenceName = "catalog.authors_id_seq", initialValue = 1, allocationSize = 1)
+    @SequenceGenerator(name = "authors_seq_gen", sequenceName = "authors_id_seq", initialValue = 1, allocationSize = 1)
     public long getId() {
         return id;
     }

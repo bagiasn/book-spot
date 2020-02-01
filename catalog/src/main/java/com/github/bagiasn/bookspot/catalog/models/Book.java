@@ -9,7 +9,7 @@ import java.io.Serializable;
 import java.util.UUID;
 
 @Entity()
-@Table(name = "books", schema = "catalog")
+@Table(name = "books")
 public class Book implements Serializable {
 
     private long id;
@@ -45,7 +45,7 @@ public class Book implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "books_seq_gen")
-    @SequenceGenerator(name = "books_seq_gen", sequenceName = "catalog.books_id_seq", allocationSize = 1)
+    @SequenceGenerator(name = "books_seq_gen", sequenceName = "books_id_seq", allocationSize = 1)
     public long getId() {
         return id;
     }

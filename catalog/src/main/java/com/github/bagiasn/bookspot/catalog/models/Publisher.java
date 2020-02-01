@@ -3,7 +3,7 @@ package com.github.bagiasn.bookspot.catalog.models;
 import javax.persistence.*;
 
 @Entity()
-@Table(name = "publishers", schema = "catalog")
+@Table(name = "publishers")
 public class Publisher {
 
     private long id;
