@@ -156,7 +156,7 @@ function loadBooks(response) {
                     })
                 });
 
-            $('.ui.modal')
+            $('.ui.modal.book')
                 .modal({
                     centered: false
                 })
