@@ -19,30 +19,38 @@ $('.ui.form.sign-up')
             email:  ['minLength[3]', 'empty'],
             first_name: 'maxLength[24]',
             last_name: 'maxLength[24]'
-        }
+        },
+        inline : true,
+        on     : 'blur'
     })
     .api({
-        action: 'create user',
-        on: 'submit',
-        method: 'POST',
-        beforeSend : function (settings) {
-            settings.data = getFormData();
-            return settings;
-        },
-        beforeXHR: (xhr) => {
-            xhr.setRequestHeader('Content-Type', 'application/json');
-        },
-        onSuccess: function () {
-            $(this).form('clear');
-        },
-        onFailure: function (response) {
-            console.log(response);
+            action: 'create user',
+            on: 'submit',
+            method: 'POST',
+            loadingDuration: 800,
+            contentType: 'application/json',
+            beforeSend: function (settings) {
+                settings.data = getFormData();
+                return settings;
+            },
+            onSuccess: function () {
+                showSuccessMessage();
+                $(this).form('clear');
+            },
+            onError: function (message, element, xhr) {
+                showErrorMessage(message, element, xhr);
+            }
         }
-    });
+    );
 
-$('#btn-sign-up').click(function () {
+$('#btn-sign-up')
+    .click(function () {
     $('.ui.modal.sign-up')
         .modal({
+            onHide: function () {
+                hideMessage();
+                $(this).form('reset');
+            },
             centered: false
         })
         .modal('show')
@@ -146,9 +154,7 @@ function loadBooks(response) {
                         action: 'rate book',
                         on: 'now',
                         method: 'PATCH',
-                        beforeXHR: (xhr) => {
-                            xhr.setRequestHeader('Content-Type', 'application/json');
-                        },
+                        contentType: 'application/json',
                         urlData: {
                             id: book.id
                         },
@@ -176,4 +182,38 @@ function loadBooks(response) {
     sessionStorage.nextPage = parseInt(response["number"]) + 1;
 
     $('.card .rating').rating('disable');
+}
+
+function showErrorMessage(errorMessage, el, xhr) {
+    console.log(errorMessage);
+
+    let message = $('.ui.message.response')[0];
+
+    if (xhr.status === 409) {
+        message.innerHTML = 'This email already exists!';
+    } else {
+        message.innerHTML = errorMessage;
+    }
+
+    message.classList.remove('success');
+    message.classList.add('error');
+    message.classList.replace('hidden', 'visible');
+}
+
+function showSuccessMessage() {
+    let message = $('.ui.message.response')[0];
+
+    message.innerHTML = 'Sign up completed! You can now log in and explore BookSpot.';
+
+    message.classList.replace('hidden', 'visible');
+    message.classList.remove('error');
+    message.classList.add('success');
+}
+
+function hideMessage() {
+    let message = $('.ui.message.response')[0];
+
+    message.classList.replace('visible', 'hidden');
+    message.classList.remove('success');
+    message.classList.remove('error');
 }
