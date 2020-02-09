@@ -4,7 +4,8 @@ $.fn.api.settings.api = {
     'get books' : 'api/catalog/books',
     'get page' : 'api/catalog/books?page={numPage}',
     'rate book' : 'api/catalog/books/{id}',
-    'create user' : 'api/user/users'
+    'sign up' : 'api/user/signup',
+    'login' : 'api/user/login'
 };
 
 $('.ui.modal')
@@ -24,21 +25,52 @@ $('.ui.form.sign-up')
         on     : 'blur'
     })
     .api({
-            action: 'create user',
+            action: 'sign up',
             on: 'submit',
             method: 'POST',
             loadingDuration: 800,
+            dataType: 'text',
             contentType: 'application/json',
             beforeSend: function (settings) {
-                settings.data = getFormData();
+                settings.data = getFormData('sign-up');
                 return settings;
             },
             onSuccess: function () {
-                showSuccessMessage();
+                showFormSuccess('sign-up');
                 $(this).form('clear');
             },
             onError: function (message, element, xhr) {
-                showErrorMessage(message, element, xhr);
+                showFormError(message, element, xhr, 'sign-up');
+            }
+        }
+    );
+
+$('.ui.form.login')
+    .form({
+        fields: {
+            password : ['minLength[6]', 'empty'],
+        },
+        inline : true,
+        on     : 'blur'
+    })
+    .api({
+            action: 'login',
+            on: 'submit',
+            method: 'POST',
+            loadingDuration: 800,
+            dataType: 'text',
+            contentType: 'application/json',
+            beforeSend: function (settings) {
+                settings.data = getFormData('login');
+                return settings;
+            },
+            onSuccess: function (response) {
+                localStorage.setItem("userToken", response);
+                showFormSuccess('login');
+                $(this).form('clear');
+            },
+            onError: function (message, element, xhr) {
+                showFormError(message, element, xhr, 'login');
             }
         }
     );
@@ -48,7 +80,7 @@ $('.ui.button.sign-up')
     $('.ui.modal.sign-up')
         .modal({
             onHide: function () {
-                hideMessage();
+                hideMessage('sign-up');
                 $(this).form('reset');
             },
             centered: false
@@ -56,6 +88,20 @@ $('.ui.button.sign-up')
         .modal('show')
     ;
 });
+
+$('.ui.button.login')
+    .click(function () {
+        $('.ui.modal.login')
+            .modal({
+                onHide: function () {
+                    hideMessage('login');
+                    $(this).form('reset');
+                },
+                centered: false
+            })
+            .modal('show')
+        ;
+    });
 
 $('.ui.button.load-more')
     .api({
@@ -90,8 +136,8 @@ $('.container')
         }
     });
 
-function getFormData() {
-    let formData = new FormData($('.ui.form.sign-up')[0]);
+function getFormData(formName) {
+    let formData = new FormData($('.ui.form.'.concat(formName))[0]);
     console.log(formData);
     return  JSON.stringify(Object.fromEntries(formData));
 }
@@ -184,15 +230,29 @@ function loadBooks(response) {
     $('.card .rating').rating('disable');
 }
 
-function showErrorMessage(errorMessage, el, xhr) {
+function showFormError(errorMessage, el, xhr, formName) {
     console.log(errorMessage);
 
-    let message = $('.ui.message.response')[0];
+    let message = $('.ui.message.'.concat(formName))[0];
 
-    if (xhr.status === 409) {
-        message.innerHTML = 'This email already exists!';
-    } else {
-        message.innerHTML = errorMessage;
+    if (formName === 'sign-up') {
+        if (xhr.status === 409) {
+            message.innerHTML = 'This email already exists!';
+        } else {
+            message.innerHTML = errorMessage;
+        }
+    } else if (formName === 'login') {
+        switch (xhr.status) {
+            case 401:
+                message.innerHTML = 'The password you entered is incorrect';
+                break;
+            case 404:
+                message.innerHTML = 'The email you entered was not found';
+                break;
+            default:
+                message.innerHTML = errorMessage;
+                break;
+        }
     }
 
     message.classList.remove('success');
@@ -200,18 +260,22 @@ function showErrorMessage(errorMessage, el, xhr) {
     message.classList.replace('hidden', 'visible');
 }
 
-function showSuccessMessage() {
-    let message = $('.ui.message.response')[0];
+function showFormSuccess(formName) {
+    let message = $('.ui.message.'.concat(formName))[0];
 
-    message.innerHTML = 'Sign up completed! You can now log in and explore BookSpot.';
+    if (formName === 'sign-up') {
+        message.innerHTML = 'Sign up completed! You can now log in and explore BookSpot.';
+    } else {
+        message.innerHTML = 'You are now logged-in.';
+    }
 
     message.classList.replace('hidden', 'visible');
     message.classList.remove('error');
     message.classList.add('success');
 }
 
-function hideMessage() {
-    let message = $('.ui.message.response')[0];
+function hideMessage(formName) {
+    let message = $('.ui.message.'.concat(formName))[0];
 
     message.classList.replace('visible', 'hidden');
     message.classList.remove('success');
