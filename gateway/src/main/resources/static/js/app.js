@@ -43,7 +43,7 @@ $('.ui.form.sign-up')
         }
     );
 
-$('#btn-sign-up')
+$('.ui.button.sign-up')
     .click(function () {
     $('.ui.modal.sign-up')
         .modal({
@@ -57,7 +57,7 @@ $('#btn-sign-up')
     ;
 });
 
-$('#btn-load-more')
+$('.ui.button.load-more')
     .api({
         action: 'get page',
         on: 'click',
