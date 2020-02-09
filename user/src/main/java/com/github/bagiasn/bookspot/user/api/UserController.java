@@ -6,6 +6,7 @@ import com.github.bagiasn.bookspot.user.models.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,7 +23,7 @@ import java.util.UUID;
 public class UserController {
 
     private static final Logger logger = LoggerFactory.getLogger(UserController.class);
-    private static final int UserTokenTtl = 720;
+    private static final int UserTokenTtl = 7200;
 
     private  UserRepository userRepository;
     private  StringRedisTemplate redisTemplate;
@@ -68,6 +69,28 @@ public class UserController {
                     return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
                 }
             }
+        }
+    }
+
+    @RequestMapping(value = "/signup", method = RequestMethod.POST)
+    public ResponseEntity<?> signUp(@RequestBody User user) {
+        logger.info("Sign-up request received");
+
+        if (user != null) {
+            try {
+                // Store an MD5 hash instead of plain text.
+                user.setPassword(HashGenerator.GetPasswordHash(user.getPassword()));
+                userRepository.save(user);
+                return ResponseEntity.status(HttpStatus.CREATED).build();
+            } catch (DataIntegrityViolationException dex) {
+                logger.warn("Postgres exception: {}", dex.getMessage());
+                return ResponseEntity.status(HttpStatus.CONFLICT).build();
+            } catch (Exception ex) {
+                logger.error("Sign up failed", ex);
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+            }
+        } else {
+            return ResponseEntity.badRequest().build();
         }
     }
 }
