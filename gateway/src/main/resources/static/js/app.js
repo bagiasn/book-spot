@@ -1,140 +1,172 @@
 'use strict';
 
-$.fn.api.settings.api = {
-    'get books' : 'api/catalog/books',
-    'get page' : 'api/catalog/books?page={numPage}',
-    'rate book' : 'api/catalog/books/{id}',
-    'sign up' : 'api/user/signup',
-    'login' : 'api/user/login'
-};
+window.onload = function() {
+    let token = localStorage.getItem('userToken');
+    let username = localStorage.getItem('userEmail');
 
-$('.ui.modal')
-    .modal()
-;
+    if (token !== null && token !== ''
+        && username !== null && username !== '') {
+        $('.ui.menu .logout').show();
+    } else {
+        $('.ui.menu .login').show();
+        $('.ui.menu .sign-up').show();
+    }
 
-$('.ui.form.sign-up')
-    .form({
-        fields: {
-            username : ['maxLength[12]', 'empty'],
-            password : ['minLength[6]', 'empty'],
-            email:  ['minLength[3]', 'empty'],
-            first_name: 'maxLength[24]',
-            last_name: 'maxLength[24]'
-        },
-        inline : true,
-        on     : 'blur'
-    })
-    .api({
-            action: 'sign up',
-            on: 'submit',
+    $.fn.api.settings.api = {
+        'get books' : 'api/catalog/books',
+        'get page' : 'api/catalog/books?page={numPage}',
+        'rate book' : 'api/catalog/books/{id}',
+        'sign up' : 'api/user/signup',
+        'login' : 'api/user/login',
+        'logout': 'api/user/logout'
+    };
+
+    $('.ui.modal')
+        .modal()
+    ;
+
+    $('.ui.menu .logout')
+        .api({
+            action: 'logout',
             method: 'POST',
-            loadingDuration: 800,
-            dataType: 'text',
+            loadingDuration: 500,
             contentType: 'application/json',
+            dataType: 'text',
             beforeSend: function (settings) {
-                settings.data = getFormData('sign-up');
+                settings.data = getCredentials();
                 return settings;
             },
             onSuccess: function () {
-                showFormSuccess('sign-up');
-                $(this).form('clear');
-            },
-            onError: function (message, element, xhr) {
-                showFormError(message, element, xhr, 'sign-up');
+                console.log("Logout success");
+                onLogoutSuccess();
+                $(this).hide();
             }
-        }
-    );
+        });
 
-$('.ui.form.login')
-    .form({
-        fields: {
-            password : ['minLength[6]', 'empty'],
-        },
-        inline : true,
-        on     : 'blur'
-    })
-    .api({
-            action: 'login',
-            on: 'submit',
-            method: 'POST',
-            loadingDuration: 800,
-            dataType: 'text',
-            contentType: 'application/json',
-            beforeSend: function (settings) {
-                settings.data = getFormData('login');
+    $('.ui.form.sign-up')
+        .form({
+            fields: {
+                username : ['maxLength[12]', 'empty'],
+                password : ['minLength[5]', 'empty'],
+                email:  ['minLength[3]', 'empty'],
+                first_name: 'maxLength[24]',
+                last_name: 'maxLength[24]'
+            },
+            inline : true,
+            on     : 'blur'
+        })
+        .api({
+                action: 'sign up',
+                on: 'submit',
+                method: 'POST',
+                loadingDuration: 800,
+                dataType: 'text',
+                contentType: 'application/json',
+                beforeSend: function (settings) {
+                    settings.data = getFormData('sign-up');
+                    return settings;
+                },
+                onSuccess: function () {
+                    showFormSuccess('sign-up');
+                    $(this).form('clear');
+                },
+                onError: function (message, element, xhr) {
+                    showFormError(message, element, xhr, 'sign-up');
+                }
+            }
+        );
+
+    $('.ui.form.login')
+        .form({
+            fields: {
+                password : ['minLength[5]', 'empty'],
+            },
+            inline : true,
+            on     : 'blur'
+        })
+        .api({
+                action: 'login',
+                on: 'submit',
+                method: 'POST',
+                loadingDuration: 800,
+                dataType: 'text',
+                contentType: 'application/json',
+                beforeSend: function (settings) {
+                    settings.data = getFormData('login');
+                    return settings;
+                },
+                onSuccess: function (response) {
+                    onLoginSuccess(response);
+
+                    $(this).form('clear');
+                },
+                onError: function (message, element, xhr) {
+                    showFormError(message, element, xhr, 'login');
+                }
+            }
+        );
+
+    $('.ui.button.sign-up')
+        .click(function () {
+            $('.ui.modal.sign-up')
+                .modal({
+                    onHide: function () {
+                        hideMessage('sign-up');
+                        $(this).form('reset');
+                    },
+                    centered: false
+                })
+                .modal('show')
+            ;
+        });
+
+    $('.ui.button.login')
+        .click(function () {
+            $('.ui.modal.login')
+                .modal({
+                    onHide: function () {
+                        hideMessage('login');
+                        $(this).form('reset');
+                    },
+                    centered: false
+                })
+                .modal('show')
+            ;
+        });
+
+    $('.ui.button.load-more')
+        .api({
+            action: 'get page',
+            on: 'click',
+            beforeSend: function(settings) {
+                settings.urlData = {
+                    numPage: parseInt(sessionStorage.nextPage)
+                };
                 return settings;
             },
             onSuccess: function (response) {
-                localStorage.setItem("userToken", response);
-                showFormSuccess('login');
-                $(this).form('clear');
+                loadBooks(response);
             },
-            onError: function (message, element, xhr) {
-                showFormError(message, element, xhr, 'login');
+            onError: function (m) {
+                console.log(m);
             }
-        }
-    );
+        });
 
-$('.ui.button.sign-up')
-    .click(function () {
-    $('.ui.modal.sign-up')
-        .modal({
-            onHide: function () {
-                hideMessage('sign-up');
-                $(this).form('reset');
+    $('.container')
+        .api({
+            action: 'get books',
+            on : 'now',
+            onSuccess: function (response) {
+                loadBooks(response);
             },
-            centered: false
-        })
-        .modal('show')
-    ;
-});
-
-$('.ui.button.login')
-    .click(function () {
-        $('.ui.modal.login')
-            .modal({
-                onHide: function () {
-                    hideMessage('login');
-                    $(this).form('reset');
-                },
-                centered: false
-            })
-            .modal('show')
-        ;
-    });
-
-$('.ui.button.load-more')
-    .api({
-        action: 'get page',
-        on: 'click',
-        beforeSend: function(settings) {
-            settings.urlData = {
-                numPage: parseInt(sessionStorage.nextPage)
-            };
-            return settings;
-        },
-        onSuccess: function (response) {
-            loadBooks(response);
-        },
-        onError: function (m) {
-            console.log(m);
-        }
-    });
-
-$('.container')
-    .api({
-        action: 'get books',
-        on : 'now',
-        onSuccess: function (response) {
-            loadBooks(response);
-        },
-        onFailure: function(response) {
-            console.log(response);
-        },
-        onError: function(errorMessage) {
-            console.log(errorMessage);
-        }
-    });
+            onFailure: function(response) {
+                console.log(response);
+            },
+            onError: function(errorMessage) {
+                console.log(errorMessage);
+            }
+        });
+};
 
 function getFormData(formName) {
     let formData = new FormData($('.ui.form.'.concat(formName))[0]);
@@ -228,6 +260,33 @@ function loadBooks(response) {
     sessionStorage.nextPage = parseInt(response["number"]) + 1;
 
     $('.card .rating').rating('disable');
+}
+
+function onLoginSuccess(response) {
+    let credentials = JSON.parse(response);
+
+    localStorage.setItem('userToken', credentials.token);
+    localStorage.setItem('userEmail', credentials.email);
+
+    showFormSuccess('login');
+
+    $('.ui.menu .login').hide();
+    $('.ui.menu .sign-up').hide();
+    $('.ui.menu .logout').show();
+}
+
+function onLogoutSuccess() {
+    localStorage.clear();
+
+    $('.ui.menu .login').show();
+    $('.ui.menu .sign-up').show();
+}
+
+function getCredentials() {
+    let userEmail = localStorage.getItem('userEmail');
+    let userToken = localStorage.getItem('userToken');
+    console.log("Got " + userToken );
+    return JSON.stringify({email: userEmail, token: userToken});
 }
 
 function showFormError(errorMessage, el, xhr, formName) {
