@@ -27,6 +27,11 @@ footer {
     margin-bottom: 2em;
 }
 
+
+.right.menu .item .button {
+    display: none;
+}
+
 .actions .rating {
     float: left;
     margin-top: 0.4em
