@@ -61,8 +61,11 @@ public class UserController {
                     String token = UUID.randomUUID().toString();
                     // Update redis.
                     redisTemplate.opsForValue().set(providedEmail, token, Duration.ofSeconds(UserTokenTtl));
+                    Credentials creds = new Credentials();
+                    creds.setEmail(providedEmail);
+                    creds.setToken(token);
 
-                    return ResponseEntity.ok().body(token);
+                    return ResponseEntity.ok().body(creds);
                 } else {
                     logger.info("Wrong password was provided.");
 
@@ -87,6 +90,40 @@ public class UserController {
                 return ResponseEntity.status(HttpStatus.CONFLICT).build();
             } catch (Exception ex) {
                 logger.error("Sign up failed", ex);
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+            }
+        } else {
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
+    @RequestMapping(value = "/logout", method = RequestMethod.POST)
+    public ResponseEntity<?> logout(@RequestBody Credentials credentials) {
+        logger.info("Logout request received");
+
+        String email = credentials.getEmail();
+        String token = credentials.getToken();
+
+        if (email != null && !email.isEmpty() && token != null && !token.isEmpty()) {
+            try {
+                String redisToken = redisTemplate.opsForValue().get(credentials.getEmail());
+                if (redisToken != null && !redisToken.isEmpty()) {
+                    // Check if the received token matches the one in redis.
+                    if (redisToken.equals(token)) {
+                        logger.info("Logging out user {}", email);
+                        redisTemplate.opsForValue().getOperations().delete(email);
+
+                        return ResponseEntity.ok().build();
+                    }
+                    else {
+                        return ResponseEntity.badRequest().build();
+                    }
+                } else {
+                    logger.info("User token for email {} does not exist.", email);
+                    return ResponseEntity.notFound().build();
+                }
+            } catch (Exception ex) {
+                logger.error("Logout failed", ex);
                 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
             }
         } else {
