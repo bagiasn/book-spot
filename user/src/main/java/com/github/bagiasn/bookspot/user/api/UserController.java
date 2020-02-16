@@ -107,20 +107,19 @@ public class UserController {
         if (email != null && !email.isEmpty() && token != null && !token.isEmpty()) {
             try {
                 String redisToken = redisTemplate.opsForValue().get(credentials.getEmail());
-                if (redisToken != null && !redisToken.isEmpty()) {
-                    // Check if the received token matches the one in redis.
-                    if (redisToken.equals(token)) {
-                        logger.info("Logging out user {}", email);
-                        redisTemplate.opsForValue().getOperations().delete(email);
+                if (redisToken == null) {
+                    // It's safe to assume that the user session expired, so indicate success.
+                    return ResponseEntity.ok().build();
+                }
+                // Check if the received token matches the one in redis.
+                if (redisToken.equals(token)) {
+                    logger.info("Logging out user {}", email);
+                    redisTemplate.opsForValue().getOperations().delete(email);
 
-                        return ResponseEntity.ok().build();
-                    }
-                    else {
-                        return ResponseEntity.badRequest().build();
-                    }
-                } else {
-                    logger.info("User token for email {} does not exist.", email);
-                    return ResponseEntity.notFound().build();
+                    return ResponseEntity.ok().build();
+                }
+                else {
+                    return ResponseEntity.badRequest().build();
                 }
             } catch (Exception ex) {
                 logger.error("Logout failed", ex);
