@@ -25,6 +25,11 @@ window.onload = function() {
         .modal()
     ;
 
+    $('.ui.dropdown.filter')
+        .dropdown({
+            allowCategorySelection: true
+        });
+
     $('.ui.menu .logout')
         .api({
             action: 'logout',

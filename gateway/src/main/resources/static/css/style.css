@@ -24,9 +24,12 @@ footer {
 
 .ui.large.menu {
     margin-top: 0;
-    margin-bottom: 2em;
+    margin-bottom: 1em;
 }
 
+.ui.dropdown.filter {
+    margin-bottom: 2em;
+}
 
 .right.menu .item .button {
     display: none;
