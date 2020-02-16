@@ -17,7 +17,7 @@ footer {
     margin: auto;
 }
 
-#btn-load-more {
+.ui.button.load-more {
     display: block;
     margin: 2em auto;
 }
@@ -25,6 +25,11 @@ footer {
 .ui.large.menu {
     margin-top: 0;
     margin-bottom: 2em;
+}
+
+
+.right.menu .item .button {
+    display: none;
 }
 
 .actions .rating {
