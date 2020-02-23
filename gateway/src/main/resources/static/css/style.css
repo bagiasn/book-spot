@@ -27,8 +27,12 @@ footer {
     margin-bottom: 1em;
 }
 
-.ui.dropdown.filter {
+.ui.segment.filter {
     margin-bottom: 1em;
+}
+
+.ui.dropdown.filter .text {
+    font-style: oblique;
 }
 
 .right.menu .item .button {
