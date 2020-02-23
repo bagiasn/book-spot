@@ -176,7 +176,8 @@ window.onload = function() {
             beforeSend: function(settings) {
                 settings.urlData = {
                     numPage: parseInt(sessionStorage.nextPage),
-                    value: $('.ui.dropdown.filter').dropdown('get value')
+                    value: $('.ui.dropdown.filter').dropdown('get value'),
+                    name: $('.ui.dropdown.filter').dropdown('get text')
                 };
                 return settings;
             },
