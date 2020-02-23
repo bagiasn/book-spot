@@ -1,6 +1,7 @@
 package com.github.bagiasn.bookspot.catalog.models;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity()
 @Table(name = "publishers")
@@ -8,6 +9,8 @@ public class Publisher {
 
     private long id;
     private String name;
+    @OneToMany(targetEntity = Book.class, mappedBy = "publisher", fetch = FetchType.EAGER)
+    private List<Book> books;
 
     public Publisher() {}
 
