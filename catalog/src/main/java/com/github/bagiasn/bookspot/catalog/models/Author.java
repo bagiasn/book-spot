@@ -3,6 +3,7 @@ package com.github.bagiasn.bookspot.catalog.models;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "authors")
@@ -20,6 +21,8 @@ public class Author {
     @JsonProperty(value = "death_date")
     private String deathDate;
     private String location;
+    @OneToMany(targetEntity = Book.class, mappedBy = "author", fetch = FetchType.EAGER)
+    private List<Book> books;
 
     public Author() {}
 

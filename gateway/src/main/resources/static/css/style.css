@@ -24,9 +24,16 @@ footer {
 
 .ui.large.menu {
     margin-top: 0;
-    margin-bottom: 2em;
+    margin-bottom: 1em;
 }
 
+.ui.segment.filter {
+    margin-bottom: 1em;
+}
+
+.ui.dropdown.filter .text {
+    font-style: oblique;
+}
 
 .right.menu .item .button {
     display: none;

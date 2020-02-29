@@ -1,6 +1,5 @@
 package com.github.bagiasn.bookspot.catalog.models;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.hibernate.annotations.Type;
 
@@ -21,25 +20,16 @@ public class Book implements Serializable {
     private double rating;
     @Type(type = "pg-uuid")
     private UUID isbn;
-    @Column(name = "publication_date")
-    @JsonProperty(value = "publication_date")
-    private String publicationDate;
+    @Column(name = "publication_year")
+    @JsonProperty(value = "publication_year")
+    private int publicationYear;
     private long pageCount;
     private String language;
     private long edition;
-    @Column(name = "author_id")
-    @JsonProperty(value = "author_id")
-    private long authorId;
-    @Column(name = "category_id")
-    @JsonProperty(value = "category_id")
-    private long categoryId;
-    @Column(name = "publisher_id")
-    @JsonProperty(value = "publisher_id")
-    private long publisherId;
-    @JsonInclude()
-    @JsonProperty(value = "category_name")
-    @Transient
-    private String categoryName;
+
+    private Author author;
+    private Category category;
+    private Publisher publisher;
 
     public Book() {}
 
@@ -94,12 +84,12 @@ public class Book implements Serializable {
         this.isbn = isbn;
     }
 
-    public String getPublicationDate() {
-        return publicationDate;
+    public int getPublicationYear() {
+        return publicationYear;
     }
 
-    public void setPublicationDate(String publicationDate) {
-        this.publicationDate = publicationDate;
+    public void setPublicationYear(int publicationYear) {
+        this.publicationYear = publicationYear;
     }
 
     public long getPageCount() {
@@ -126,35 +116,33 @@ public class Book implements Serializable {
         this.edition = edition;
     }
 
-    public long getAuthorId() {
-        return authorId;
+    @ManyToOne
+    @JoinColumn(name = "publisher_id")
+    public Publisher getPublisher() {
+        return publisher;
     }
 
-    public void setAuthorId(long authorId) {
-        this.authorId = authorId;
+    public void setPublisher(Publisher publisher) {
+        this.publisher = publisher;
     }
 
-    public long getCategoryId() {
-        return categoryId;
+    @ManyToOne
+    @JoinColumn(name = "category_id")
+    public Category getCategory() {
+        return category;
     }
 
-    public void setCategoryId(long categoryId) {
-        this.categoryId = categoryId;
+    public void setCategory(Category category) {
+        this.category = category;
     }
 
-    public long getPublisherId() {
-        return publisherId;
+    @ManyToOne
+    @JoinColumn(name = "author_id")
+    public Author getAuthor() {
+        return author;
     }
 
-    public void setPublisherId(long publisherId) {
-        this.publisherId = publisherId;
-    }
-    @Transient
-    public String getCategoryName() {
-        return categoryName;
-    }
-    @Transient
-    public void setCategoryName(String categoryName) {
-        this.categoryName = categoryName;
+    public void setAuthor(Author author) {
+        this.author = author;
     }
 }

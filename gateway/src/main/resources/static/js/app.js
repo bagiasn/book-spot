@@ -12,9 +12,11 @@ window.onload = function() {
         $('.ui.menu .sign-up').show();
     }
 
+    sessionStorage.nextPage = 0;
+    sessionStorage.selectedFilter = '';
+
     $.fn.api.settings.api = {
-        'get books' : 'api/catalog/books',
-        'get page' : 'api/catalog/books?page={numPage}',
+        'get books' : 'api/catalog/books/search/{value}?page={numPage}&name={/name}',
         'rate book' : 'api/catalog/books/{id}',
         'sign up' : 'api/user/signup',
         'login' : 'api/user/login',
@@ -24,6 +26,39 @@ window.onload = function() {
     $('.ui.modal')
         .modal()
     ;
+
+    $('.ui.dropdown.filter')
+        .dropdown({
+            allowReselection: false,
+            onChange: function (value, text) {
+                let selectedFilter = sessionStorage.selectedFilter;
+                if (selectedFilter === '' || selectedFilter !== text) {
+                    sessionStorage.selectedFilter = text;
+                    sessionStorage.nextPage = 0;
+
+                    $(this).api({
+                        action: 'get books',
+                        on: 'now',
+                        beforeSend: function(settings) {
+                            settings.urlData = {
+                                numPage: parseInt(sessionStorage.nextPage),
+                                name: value.includes("Category") ? text : ""
+                            };
+                            return settings;
+                        },
+                        onSuccess: function (response) {
+                            clearBooks();
+                            loadBooks(response);
+                        },
+                        onError: function (m) {
+                            console.log(m);
+                        }
+                    });
+                }
+            }
+        });
+
+    $('.ui.dropdown.filter').dropdown('set selected', 'byYearDesc');
 
     $('.ui.menu .logout')
         .api({
@@ -136,11 +171,13 @@ window.onload = function() {
 
     $('.ui.button.load-more')
         .api({
-            action: 'get page',
+            action: 'get books',
             on: 'click',
             beforeSend: function(settings) {
                 settings.urlData = {
-                    numPage: parseInt(sessionStorage.nextPage)
+                    numPage: parseInt(sessionStorage.nextPage),
+                    value: $('.ui.dropdown.filter').dropdown('get value'),
+                    name: $('.ui.dropdown.filter').dropdown('get text')
                 };
                 return settings;
             },
@@ -151,21 +188,6 @@ window.onload = function() {
                 console.log(m);
             }
         });
-
-    $('.container')
-        .api({
-            action: 'get books',
-            on : 'now',
-            onSuccess: function (response) {
-                loadBooks(response);
-            },
-            onFailure: function(response) {
-                console.log(response);
-            },
-            onError: function(errorMessage) {
-                console.log(errorMessage);
-            }
-        });
 };
 
 function getFormData(formName) {
@@ -174,8 +196,8 @@ function getFormData(formName) {
     return  JSON.stringify(Object.fromEntries(formData));
 }
 
-function loadBooks(response) {
-    const books = response["content"];
+function loadBooks(payload) {
+    const books = payload["_embedded"]["books"];
 
     books.forEach(book => {
         let card = document.createElement("div");
@@ -202,7 +224,7 @@ function loadBooks(response) {
         header.innerText = book.title;
         img.src = `http://covers.openlibrary.org/b/id/${book.cover_id}-M.jpg`;
         img.alt = 'Book cover image';
-        meta.innerText = book.category_name;
+        meta.innerText = book._embedded.category.name;
         extra.innerText = 'Rating: ';
         ratingAttr.value = book.rating;
         maxAttr.value = "5";
@@ -257,7 +279,7 @@ function loadBooks(response) {
         cards.appendChild(card);
     });
 
-    sessionStorage.nextPage = parseInt(response["number"]) + 1;
+    sessionStorage.nextPage = parseInt(sessionStorage.nextPage) + 1;
 
     $('.card .rating').rating('disable');
 }
@@ -339,4 +361,8 @@ function hideMessage(formName) {
     message.classList.replace('visible', 'hidden');
     message.classList.remove('success');
     message.classList.remove('error');
+}
+
+function clearBooks() {
+    $('.ui.link.cards').empty();
 }
