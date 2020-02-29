@@ -15,11 +15,12 @@
             Home
         </div>
         <div class="right menu">
-            <div class="item">
+            <div class="item ui search">
                 <div class="ui icon input">
-                    <input type="text" placeholder="Search...">
-                    <i class="search link icon"></i>
+                    <input class="prompt" type="text" placeholder="Search books...">
+                    <i class="search icon"></i>
                 </div>
+                <div class="results"></div>
             </div>
             <div class="item">
                 <div class="ui teal button sign-up">Sign up</div>
@@ -109,7 +110,7 @@
             </div>
         </div>
         <div class="actions">
-            <div class="ui huge star rating" data-title="Thanks for rating!" data-max-rating="5">
+            <div class="ui huge star rating" id="modal-rating" data-title="Thanks for rating!" data-max-rating="5">
             </div>
             <div class="ui buttons">
                 <div class="ui teal right labeled icon button">
