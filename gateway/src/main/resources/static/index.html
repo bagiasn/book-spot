@@ -90,24 +90,24 @@
                 <img id="modal-img">
             </div>
             <p id="modal-desc"></p>
-            <div class="ui horizontal list">
-                <div class="item">
-                    <div class="header">Author</div>
-                    Nikolaos Bagias
-                </div>
-                <div class="item">
-                    <div class="header">Category</div>
-                    Fantasy
-                </div>
-                <div class="item">
-                    <div class="header">Publication Date</div>
-                    Nov. 1922
-                </div>
-                <div class="item">
-                    <div class="header">Publisher</div>
-                    Manning Publications
-                </div>
-            </div>
+            <table class="ui very basic collapsing celled table book-info">
+                <thead>
+                <tr>
+                    <th>Author</th>
+                    <th>Category</th>
+                    <th>Publisher</th>
+                    <th>Publication Year</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td class="row author"></td>
+                    <td class="row category"></td>
+                    <td class="row publisher"></td>
+                    <td class="row publication"></td>
+                </tr>
+                </tbody>
+            </table>
         </div>
         <div class="actions">
             <div class="ui huge star rating" id="modal-rating" data-title="Thanks for rating!" data-max-rating="5">

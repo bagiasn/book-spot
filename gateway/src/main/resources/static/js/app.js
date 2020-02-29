@@ -387,6 +387,12 @@ function showBook(book) {
     let rating = document.getElementById("modal-rating");
     let bookId = book.id;
 
+    let info = $('.ui.table.book-info')[0].tBodies[0].rows[0].cells;
+    info[0].innerHTML = book._embedded.author.name;
+    info[1].innerHTML = book._embedded.category.name;
+    info[2].innerHTML = book._embedded.publisher.name;
+    info[3].innerHTML = book.publication_year;
+
     let ratingBar = $('.actions .rating');
     ratingBar
         .rating('set rating', rating.getAttribute("data-rating"))
