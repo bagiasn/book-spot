@@ -384,8 +384,6 @@ function showBook(book) {
     modalDesc.innerText = book.description;
     let modalHeader = document.getElementById("modal-header");
     modalHeader.innerText = book.title;
-    let rating = document.getElementById("modal-rating");
-    let bookId = book.id;
 
     let info = $('.ui.table.book-info')[0].tBodies[0].rows[0].cells;
     info[0].innerHTML = book._embedded.author.name;
@@ -394,23 +392,26 @@ function showBook(book) {
     info[3].innerHTML = book.publication_year;
     info[4].innerHTML = book.page_count;
 
+    let bookUri = book._links.self.href;
+    let bookId = bookUri.substring(bookUri.lastIndexOf('/')  + 1);
+
     let ratingBar = $('.actions .rating');
     ratingBar
-        .rating('set rating', rating.getAttribute("data-rating"))
+        .rating('set rating', book.rating)
         .popup({
             on: 'click'
         })
-        .rating('setting', 'onRate', function (value) {
-            ratingBar.api({
-                action: 'rate book',
-                on: 'now',
-                method: 'PATCH',
-                contentType: 'application/json',
-                urlData: {
-                    id: bookId
-                },
-                data : JSON.stringify({rating: parseInt(value)})
-            })
+        .api({
+            action: 'rate book',
+            method: 'PATCH',
+            contentType: 'application/json',
+            urlData: {
+                id: bookId
+            },
+            beforeSend: function(settings) {
+                settings.data = JSON.stringify({rating: parseInt($(this).rating('get rating'))});
+                return settings;
+            }
         });
 
     $('.ui.modal.book')
