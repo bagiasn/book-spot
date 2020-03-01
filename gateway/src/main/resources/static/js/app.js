@@ -392,7 +392,7 @@ function showBook(book) {
     info[1].innerHTML = book._embedded.category.name;
     info[2].innerHTML = book._embedded.publisher.name;
     info[3].innerHTML = book.publication_year;
-    info[4].innerHTML = book.pageCount;
+    info[4].innerHTML = book.page_count;
 
     let ratingBar = $('.actions .rating');
     ratingBar
