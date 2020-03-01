@@ -39,6 +39,22 @@ footer {
     display: none;
 }
 
+#modal-desc {
+    text-overflow: ellipsis;
+    word-wrap: break-word;
+    overflow: hidden;
+    max-height: 13em;
+    line-height: 1.3em;
+}
+
+.ui.modal.book .description {
+    display: flex;
+    flex-direction: column;
+}
+.ui.table.book-info {
+    margin-top: auto;
+}
+
 .actions .rating {
     float: left;
     margin-top: 0.4em
