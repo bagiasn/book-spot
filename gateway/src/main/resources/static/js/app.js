@@ -16,16 +16,57 @@ window.onload = function() {
     sessionStorage.selectedFilter = '';
 
     $.fn.api.settings.api = {
-        'get books' : 'api/catalog/books/search/{value}?page={numPage}&name={/name}',
-        'rate book' : 'api/catalog/books/{id}',
-        'sign up' : 'api/user/signup',
-        'login' : 'api/user/login',
-        'logout': 'api/user/logout'
+        'get books': 'api/catalog/books/search/{value}?page={numPage}&name={/name}',
+        'search'   : 'api/catalog/books/search/byTitle?title={query}',
+        'rate book': 'api/catalog/books/{id}',
+        'sign up'  : 'api/user/signup',
+        'login'    : 'api/user/login',
+        'logout'   : 'api/user/logout'
     };
 
     $('.ui.modal')
-        .modal()
-    ;
+        .modal();
+
+    $('.ui.search')
+        .search({
+            minCharacters: 4,
+            maxResults: 5,
+            showNoResults: true,
+            searchDelay: 300,
+            type : 'category',
+            apiSettings: {
+                onResponse: function (apiResponse) {
+                    let response = { results : {}};
+
+                    $.each(apiResponse._embedded.books, function (index, book) {
+                        let categoryName = book._embedded.category.name;
+                        if(response.results[categoryName] === undefined) {
+                            response.results[categoryName] = {
+                                name    : categoryName,
+                                results : []
+                            };
+                        }
+
+                        response.results[categoryName].results.push({
+                            title : book.title,
+                            description : book._embedded.author.name,
+                            fullBook : JSON.stringify(book)
+                        });
+                    });
+
+                    return response;
+                }
+            },
+            onSelect: function (result) {
+                // We are storing the whole object in a property to avoid querying again.
+                let book = JSON.parse(result.fullBook);
+                showBook(book);
+                // Clear search text.
+                $(this).search('set value', '');
+
+                return false;
+            }
+        });
 
     $('.ui.dropdown.filter')
         .dropdown({
@@ -236,38 +277,7 @@ function loadBooks(payload) {
 
         // Add event listeners
         card.addEventListener("click", function () {
-            let modalImg = document.getElementById("modal-img");
-            modalImg.src = img.src;
-            let modalDesc = document.getElementById("modal-desc");
-            modalDesc.innerText = book.description;
-            let modalHeader = document.getElementById("modal-header");
-            modalHeader.innerText = header.innerText;
-
-            let ratingBar = $('.actions .rating');
-            ratingBar
-                .rating('set rating', rating.getAttribute("data-rating"))
-                .popup({
-                    on: 'click'
-                })
-                .rating('setting', 'onRate', function (value) {
-                    ratingBar.api({
-                        action: 'rate book',
-                        on: 'now',
-                        method: 'PATCH',
-                        contentType: 'application/json',
-                        urlData: {
-                            id: book.id
-                        },
-                        data : JSON.stringify({rating: parseInt(value)})
-                    })
-                });
-
-            $('.ui.modal.book')
-                .modal({
-                    centered: false
-                })
-                .modal('show')
-            ;
+            showBook(book);
         });
         card.appendChild(image);
         card.appendChild(content);
@@ -365,4 +375,49 @@ function hideMessage(formName) {
 
 function clearBooks() {
     $('.ui.link.cards').empty();
+}
+
+function showBook(book) {
+    let modalImg = document.getElementById("modal-img");
+    modalImg.src = `http://covers.openlibrary.org/b/id/${book.cover_id}-M.jpg`;
+    let modalDesc = document.getElementById("modal-desc");
+    modalDesc.innerText = book.description;
+    let modalHeader = document.getElementById("modal-header");
+    modalHeader.innerText = book.title;
+
+    let info = $('.ui.table.book-info')[0].tBodies[0].rows[0].cells;
+    info[0].innerHTML = book._embedded.author.name;
+    info[1].innerHTML = book._embedded.category.name;
+    info[2].innerHTML = book._embedded.publisher.name;
+    info[3].innerHTML = book.publication_year;
+    info[4].innerHTML = book.page_count;
+
+    let bookUri = book._links.self.href;
+    let bookId = bookUri.substring(bookUri.lastIndexOf('/')  + 1);
+
+    let ratingBar = $('.actions .rating');
+    ratingBar
+        .rating('set rating', book.rating)
+        .popup({
+            on: 'click'
+        })
+        .api({
+            action: 'rate book',
+            method: 'PATCH',
+            contentType: 'application/json',
+            urlData: {
+                id: bookId
+            },
+            beforeSend: function(settings) {
+                settings.data = JSON.stringify({rating: parseInt($(this).rating('get rating'))});
+                return settings;
+            }
+        });
+
+    $('.ui.modal.book')
+        .modal({
+            centered: false
+        })
+        .modal('show')
+    ;
 }

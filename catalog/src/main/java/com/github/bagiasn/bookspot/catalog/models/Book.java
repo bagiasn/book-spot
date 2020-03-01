@@ -23,6 +23,7 @@ public class Book implements Serializable {
     @Column(name = "publication_year")
     @JsonProperty(value = "publication_year")
     private int publicationYear;
+    @JsonProperty(value = "page_count")
     private long pageCount;
     private String language;
     private long edition;

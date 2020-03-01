@@ -15,11 +15,12 @@
             Home
         </div>
         <div class="right menu">
-            <div class="item">
+            <div class="item ui search">
                 <div class="ui icon input">
-                    <input type="text" placeholder="Search...">
-                    <i class="search link icon"></i>
+                    <input class="prompt" type="text" placeholder="Search books...">
+                    <i class="search icon"></i>
                 </div>
+                <div class="results"></div>
             </div>
             <div class="item">
                 <div class="ui teal button sign-up">Sign up</div>
@@ -84,32 +85,34 @@
     <div class="ui modal book">
         <div class="header" id="modal-header">
         </div>
-        <div class="content">
-            <div class="ui left floated image">
-                <img id="modal-img">
-            </div>
-            <p id="modal-desc"></p>
-            <div class="ui horizontal list">
-                <div class="item">
-                    <div class="header">Author</div>
-                    Nikolaos Bagias
-                </div>
-                <div class="item">
-                    <div class="header">Category</div>
-                    Fantasy
-                </div>
-                <div class="item">
-                    <div class="header">Publication Date</div>
-                    Nov. 1922
-                </div>
-                <div class="item">
-                    <div class="header">Publisher</div>
-                    Manning Publications
-                </div>
+        <div class="image content">
+            <img class="image" id="modal-img">
+            <div class="description">
+                <p id="modal-desc"></p>
+                <table class="ui very basic collapsing celled table book-info">
+                    <thead>
+                    <tr>
+                        <th>Author</th>
+                        <th>Category</th>
+                        <th>Publisher</th>
+                        <th>Publication Year</th>
+                        <th>Page Count</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    </tbody>
+                </table>
             </div>
         </div>
         <div class="actions">
-            <div class="ui huge star rating" data-title="Thanks for rating!" data-max-rating="5">
+            <div class="ui huge star rating" id="modal-rating" data-title="Thanks for rating!" data-max-rating="5">
             </div>
             <div class="ui buttons">
                 <div class="ui teal right labeled icon button">

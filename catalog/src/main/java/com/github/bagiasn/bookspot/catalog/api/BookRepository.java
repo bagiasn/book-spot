@@ -7,6 +7,8 @@ import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.data.rest.core.annotation.RestResource;
 
+import java.util.List;
+
 public interface BookRepository extends PagingAndSortingRepository<Book, Long> {
 
     @RestResource(path = "/byRatingAsc", rel = "/byRatingAsc")
@@ -23,4 +25,7 @@ public interface BookRepository extends PagingAndSortingRepository<Book, Long> {
 
     @RestResource(path = "/byCategory", rel = "/byCategory")
     Page<Book> findAllByCategory_Name(@Param("name") String categoryName, Pageable pageable);
+
+    @RestResource(path = "/byTitle", rel = "/byTitle")
+    List<Book> findBooksByTitleContainingIgnoreCase(@Param("title") String title);
 }
