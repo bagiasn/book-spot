@@ -1,4 +1,4 @@
-package com.github.bagiasn.bookspot.common.utils;
+package com.github.bagiasn.bookspot.user.utils;
 
 import javax.xml.bind.DatatypeConverter;
 import java.security.MessageDigest;

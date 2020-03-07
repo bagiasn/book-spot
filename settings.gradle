@@ -1,5 +1,0 @@
-include 'common'
-include 'catalog'
-include 'gateway'
-include 'user'
-

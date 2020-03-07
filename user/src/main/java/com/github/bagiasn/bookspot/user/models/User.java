@@ -1,7 +1,6 @@
 package com.github.bagiasn.bookspot.user.models;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.github.bagiasn.bookspot.common.utils.HashGenerator;
 
 import javax.persistence.*;
 
