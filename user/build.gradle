@@ -18,17 +18,12 @@ configurations {
     runtimeClasspath {
         extendsFrom developmentOnly
     }
+    compile.exclude module: 'spring-boot-starter-tomcat'
 }
-
-dependencyManagement {
-    imports {
-        mavenBom("org.springframework.boot:spring-boot-dependencies:2.2.0.RELEASE")
-    }
-}
-
 
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-data-rest'
+    implementation 'org.springframework.boot:spring-boot-starter-jetty'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-data-redis'
     developmentOnly 'org.springframework.boot:spring-boot-devtools'

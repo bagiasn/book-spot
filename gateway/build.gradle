@@ -1,13 +1,12 @@
 plugins {
-	id 'io.spring.dependency-management' version '1.0.8.RELEASE'
+	id 'org.springframework.boot' version '2.2.0.RELEASE'
 }
-
-group = 'com.github.bagiasn.bookspot'
-version = '0.0.1-SNAPSHOT'
 
 apply plugin: 'java'
 apply plugin: 'io.spring.dependency-management'
-apply plugin: 'java-library'
+
+group = 'com.github.bagiasn.bookspot'
+version = '0.1.0'
 
 repositories {
 	jcenter()
@@ -19,14 +18,8 @@ configurations {
 	runtimeClasspath {
 		extendsFrom developmentOnly
 	}
+	compile.exclude module: 'spring-boot-starter-tomcat'
 }
-
-dependencyManagement {
-	imports {
-		mavenBom("org.springframework.boot:spring-boot-dependencies:2.2.0.RELEASE")
-	}
-}
-
 
 ext {
 	set('springCloudVersion', "Hoxton.RC1")
@@ -34,6 +27,7 @@ ext {
 
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'org.springframework.boot:spring-boot-starter-jetty'
 	implementation 'org.springframework.cloud:spring-cloud-starter-netflix-zuul'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 	testImplementation('org.springframework.boot:spring-boot-starter-test') {

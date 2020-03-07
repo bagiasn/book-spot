@@ -1,13 +1,12 @@
 plugins {
-	id 'io.spring.dependency-management' version '1.0.8.RELEASE'
+	id 'org.springframework.boot' version '2.2.0.RELEASE'
 }
-
-group = 'com.github.bagiasn.bookspot'
-version = '0.0.1-SNAPSHOT'
 
 apply plugin: 'java'
 apply plugin: 'io.spring.dependency-management'
-apply plugin: 'java-library'
+
+group = 'com.github.bagiasn.bookspot'
+version = '0.1.0'
 
 repositories {
 	jcenter()
@@ -19,16 +18,12 @@ configurations {
 	runtimeClasspath {
 		extendsFrom developmentOnly
 	}
-}
-
-dependencyManagement {
-	imports {
-		mavenBom("org.springframework.boot:spring-boot-dependencies:2.2.0.RELEASE")
-	}
+	compile.exclude module: 'spring-boot-starter-tomcat'
 }
 
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-data-rest'
+	implementation 'org.springframework.boot:spring-boot-starter-jetty'
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
