@@ -38,6 +38,10 @@ services:
       context: ./user
       args:
         - MAIN_CLASS=user.UserApplication
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/users
+      - SPRING_DATASOURCE_USERNAME=dev
+      - SPRING_DATASOURCE_PASSWORD=!QL5S7BDFRs8
     ports:
       - "8100:8100"
     depends_on:
@@ -50,6 +54,10 @@ services:
       context: ./catalog
       args:
         - MAIN_CLASS=catalog.CatalogApplication
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/catalog
+      - SPRING_DATASOURCE_USERNAME=dev
+      - SPRING_DATASOURCE_PASSWORD=!QL5S7BDFRs8
     ports:
       - "8090:8090"
     depends_on:
