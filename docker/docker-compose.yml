@@ -2,6 +2,7 @@ version: '3.7'
 services:
   db:
     image: postgres:12.0-alpine
+    container_name: postgres
     restart: always
     environment:
       POSTGRES_PASSWORD: "******"
@@ -12,7 +13,15 @@ services:
 
   redis:
     image: redis:5.0.7-alpine
+    container_name: redis
     command: ["redis-server", "--appendonly", "yes"]
     hostname: redis
     ports:
       - "6379:6379"
+
+  rabbitmq:
+    image: rabbitmq:3.8.2-management-alpine
+    container_name: rabbitmq
+    ports:
+    - "5672:5672"
+    - "15672:15672"
