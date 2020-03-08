@@ -42,6 +42,7 @@ services:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/users
       - SPRING_DATASOURCE_USERNAME=dev
       - SPRING_DATASOURCE_PASSWORD=!QL5S7BDFRs8
+      - SPRING_REDIS_HOST=redis
     ports:
       - "8100:8100"
     depends_on:
