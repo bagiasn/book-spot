@@ -70,6 +70,9 @@ services:
       context: ./gateway
       args:
         - MAIN_CLASS=gateway.GatewayApplication
+    environment:
+      - ZUUL_ROUTES_CATALOG_URL=http://catalog-api:8090/catalog
+      - ZUUL_ROUTES_USER_URL=http://user-api:8100/user
     ports:
       - "8080:8080"
     depends_on:
