@@ -1,5 +1,4 @@
-include 'common'
-include 'catalog'
+rootProject.name = 'BookSpot'
 include 'gateway'
 include 'user'
-
+include 'catalog'

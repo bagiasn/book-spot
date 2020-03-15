@@ -1,8 +1,31 @@
+plugins {
+    id 'org.springframework.boot' version '2.2.0.RELEASE'
+}
+
+apply plugin: 'java'
+apply plugin: 'io.spring.dependency-management'
+
+group = "com.github.bagiasn.bookspot"
+version = "0.1.0"
+
+repositories {
+    jcenter()
+    maven { url 'https://repo.spring.io/milestone' }
+}
+
+configurations {
+    developmentOnly
+    runtimeClasspath {
+        extendsFrom developmentOnly
+    }
+    compile.exclude module: 'spring-boot-starter-tomcat'
+}
+
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-data-rest'
+    implementation 'org.springframework.boot:spring-boot-starter-jetty'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-data-redis'
-    implementation project(':common')
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
     runtimeOnly 'org.postgresql:postgresql'
     testImplementation('org.springframework.boot:spring-boot-starter-test') {

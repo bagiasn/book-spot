@@ -1,8 +1,8 @@
 package com.github.bagiasn.bookspot.user.api;
 
-import com.github.bagiasn.bookspot.common.utils.HashGenerator;
 import com.github.bagiasn.bookspot.user.models.Credentials;
 import com.github.bagiasn.bookspot.user.models.User;
+import com.github.bagiasn.bookspot.user.utils.HashGenerator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
