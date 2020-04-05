@@ -1,0 +1,16 @@
+syntax = "proto3";
+package api;
+
+// The announcement service definition.
+service Announcement {
+    // Start listening for announcements.
+    rpc Listen(Request) returns (stream AnnouncementMessage) {}
+}
+
+message AnnouncementMessage {
+    string message = 1;
+}
+
+message Request {
+    int32 clientId = 1;
+}
