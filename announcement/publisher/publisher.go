@@ -5,6 +5,7 @@ import (
 	"flag"
 	"io"
 	"net/http"
+	"os"
 
 	pb "github.com/bagiasn/bookspot/announcement/api"
 	"github.com/gorilla/websocket"
@@ -14,10 +15,13 @@ import (
 
 var (
 	grpcServerAddr = flag.String("grpc_server_addr", "localhost:12000", "The GRPC server address (host:port)")
-	serverAddr     = flag.String("server_addr", "localhost:8585", "The server address (host:port)")
+	addr           = flag.String("addr", "localhost:8585", "The WS server address (host:port)")
 )
 
-var upgrader = websocket.Upgrader{}
+var upgrader = websocket.Upgrader{
+	ReadBufferSize:  1024,
+	WriteBufferSize: 1024,
+}
 
 // MessageBus acts as a communication channel between websocket server and announcement receiver.
 type MessageBus struct {
@@ -41,9 +45,9 @@ func (m *MessageBus) receiveAnnouncements(client pb.AnnouncementClient) {
 			log.Fatalf("%v.Recv(_) = _, %v", client, err)
 		}
 
-		log.Debug(announcement)
+		log.Debug(announcement.Message)
 
-		m.messages <- announcement.GetMessage()
+		m.messages <- announcement.Message
 	}
 }
 
@@ -62,6 +66,11 @@ func (m *MessageBus) publishAnnouncements(w http.ResponseWriter, r *http.Request
 			log.Error(err)
 		}
 	}
+}
+
+func init() {
+	// Output to stdout instead of the default stderr
+	log.SetOutput(os.Stdout)
 }
 
 func main() {
@@ -85,4 +94,5 @@ func main() {
 
 	http.HandleFunc("/listen", messageBus.publishAnnouncements)
 
+	log.Fatal(http.ListenAndServe(*addr, nil))
 }
