@@ -6,6 +6,7 @@ import (
 	"io"
 	"net/http"
 	"os"
+	"strings"
 
 	pb "github.com/bagiasn/bookspot/announcement/api"
 	"github.com/gorilla/websocket"
@@ -21,6 +22,9 @@ var (
 var upgrader = websocket.Upgrader{
 	ReadBufferSize:  1024,
 	WriteBufferSize: 1024,
+	CheckOrigin: func(r *http.Request) bool {
+		return strings.Compare(r.Header.Get("Origin"), "http://localhost:8080") == 0
+	},
 }
 
 // MessageBus acts as a communication channel between websocket server and announcement receiver.
