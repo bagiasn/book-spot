@@ -24,6 +24,14 @@ window.onload = function() {
         'logout'   : 'api/user/logout'
     };
 
+    let webSocket = new WebSocket('ws://localhost:8585/listen');
+
+    webSocket.onmessage = function (event) {
+        $('.ui.announcement span').fadeOut(function() {
+            $(this).text(event.data).fadeIn();
+        });
+    };
+
     $('.ui.modal')
         .modal();
 
