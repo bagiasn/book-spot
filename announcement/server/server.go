@@ -10,7 +10,7 @@ import (
 	"os"
 	"time"
 
-	pb "github.com/bagiasn/bookspot/announcement/api"
+	pb "github.com/bagiasn/book-spot/announcement/api"
 	"github.com/bxcodec/faker/v3"
 
 	log "github.com/sirupsen/logrus"

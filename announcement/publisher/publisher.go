@@ -8,7 +8,7 @@ import (
 	"os"
 	"strings"
 
-	pb "github.com/bagiasn/bookspot/announcement/api"
+	pb "github.com/bagiasn/book-spot/announcement/api"
 	"github.com/gorilla/websocket"
 	log "github.com/sirupsen/logrus"
 	"google.golang.org/grpc"

@@ -27,10 +27,6 @@ footer {
     margin-bottom: 1em;
 }
 
-.ui.segment.filter {
-    margin-bottom: 1em;
-}
-
 .ui.dropdown.filter .text {
     font-style: oblique;
 }
@@ -58,4 +54,12 @@ footer {
 .actions .rating {
     float: left;
     margin-top: 0.4em
+}
+
+.info-section {
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 1em;
 }
