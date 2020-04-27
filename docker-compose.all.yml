@@ -72,3 +72,23 @@ services:
     depends_on:
       - catalog-api
       - user-api
+
+  announcement-server:
+    image: bookspot/announcement-server
+    container_name: announcement-server
+    build:
+      context: ./announcement/server
+    ports:
+      - "12000:12000"
+
+  announcement-publisher:
+    image: bookspot/announcement-publisher
+    container_name: announcement-publisher
+    build:
+      context: ./announcement/publisher
+      args:
+        - SERVER_URI=announcement-server:12000
+    ports:
+      - "8585:8585"
+    depends_on:
+      - announcement-server
