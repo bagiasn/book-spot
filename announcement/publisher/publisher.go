@@ -80,6 +80,11 @@ func init() {
 func main() {
 	flag.Parse()
 
+	log.WithFields(log.Fields{
+		"serverUri":    *grpcServerAddr,
+		"webSocketUri": *addr,
+	}).Info("Connecting to announcement server")
+
 	messageBus := &MessageBus{messages: make(chan string)}
 
 	var opts []grpc.DialOption

@@ -56,9 +56,9 @@ func init() {
 
 // Start a gRPC server that produces fake announcements.
 func main() {
-	log.Info("Staring Announcement Server.")
+	log.Info("Starting announcement server")
 
-	lis, err := net.Listen("tcp", fmt.Sprintf("localhost:%d", *port))
+	lis, err := net.Listen("tcp", fmt.Sprintf(":%d", *port))
 	if err != nil {
 		log.Fatalf("Failed to bind port %d: %v", *port, err)
 	}

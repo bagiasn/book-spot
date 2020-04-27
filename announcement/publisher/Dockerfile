@@ -1,5 +1,9 @@
-# Dockerfile for announcement server.
+# Dockerfile for announcement publisher.
 # Using multistage build.
+
+# Using global ARG in order to access server url on the second build stage.
+# More info: https://github.com/moby/moby/issues/37345
+ARG SERVER_URI
 
 FROM golang:1.14.1-alpine AS builder
 
@@ -28,12 +32,14 @@ COPY . .
 # Target linux and omit debug info
 RUN GOOS=linux GOARCH=amd64 go build -ldflags="-w -s"
 
-FROM scratch
+FROM alpine:3.11
+
+ARG SERVER_URI
+ENV ENV_SERVER_URI=${SERVER_URI}
 
 # Copy the executable from the previous stage.
-COPY --from=builder /app/server /
-COPY --from=builder /app/book_names.json /
+COPY --from=builder /app/publisher /
 
-EXPOSE 12000
+EXPOSE 8585
 
-ENTRYPOINT ["/server"]
+ENTRYPOINT /publisher --grpc_server_addr "$ENV_SERVER_URI" --addr ":8585"
