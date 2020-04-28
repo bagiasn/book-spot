@@ -27,10 +27,6 @@ services:
   user-api:
     image: bagiasn/user-api
     container_name: user
-    build:
-      context: ./user
-      args:
-        - MAIN_CLASS=user.UserApplication
     environment:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/users
       - SPRING_DATASOURCE_USERNAME=dev
@@ -44,10 +40,6 @@ services:
   catalog-api:
     image: bagiasn/catalog-api
     container_name: catalog
-    build:
-      context: ./catalog
-      args:
-        - MAIN_CLASS=catalog.CatalogApplication
     environment:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/catalog
       - SPRING_DATASOURCE_USERNAME=dev
@@ -60,10 +52,6 @@ services:
   gateway-api:
     image: bagiasn/gateway-api
     container_name: gateway
-    build:
-      context: ./gateway
-      args:
-        - MAIN_CLASS=gateway.GatewayApplication
     environment:
       - ZUUL_ROUTES_CATALOG_URL=http://catalog-api:8090/catalog
       - ZUUL_ROUTES_USER_URL=http://user-api:8100/user
@@ -76,18 +64,12 @@ services:
   announcement-server:
     image: bagiasn/announcement-server
     container_name: announcement-server
-    build:
-      context: ./announcement/server
     ports:
       - "12000:12000"
 
   announcement-publisher:
     image: bagiasn/announcement-publisher
     container_name: announcement-publisher
-    build:
-      context: ./announcement/publisher
-      args:
-        - SERVER_URI=announcement-server:12000
     ports:
       - "8585:8585"
     depends_on:
