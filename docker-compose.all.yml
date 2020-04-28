@@ -1,7 +1,7 @@
 version: '3.7'
 services:
   db:
-    image: postgres:12.0-alpine
+    image: bagiasn/postgres
     container_name: postgres
     restart: always
     environment:
@@ -17,7 +17,7 @@ services:
       - ./postgres/init:/docker-entrypoint-initdb.d
 
   redis:
-    image: redis:5.0.7-alpine
+    image: bagiasn/redis
     container_name: redis
     command: ["redis-server", "--appendonly", "yes"]
     hostname: redis
@@ -25,7 +25,7 @@ services:
       - "6379:6379"
 
   user-api:
-    image: bookspot/user-api
+    image: bagiasn/user-api
     container_name: user
     build:
       context: ./user
@@ -42,7 +42,7 @@ services:
       - db
 
   catalog-api:
-    image: bookspot/catalog-api
+    image: bagiasn/catalog-api
     container_name: catalog
     build:
       context: ./catalog
@@ -58,7 +58,7 @@ services:
       - db
 
   gateway-api:
-    image: bookspot/gateway-api
+    image: bagiasn/gateway-api
     container_name: gateway
     build:
       context: ./gateway
@@ -74,7 +74,7 @@ services:
       - user-api
 
   announcement-server:
-    image: bookspot/announcement-server
+    image: bagiasn/announcement-server
     container_name: announcement-server
     build:
       context: ./announcement/server
@@ -82,7 +82,7 @@ services:
       - "12000:12000"
 
   announcement-publisher:
-    image: bookspot/announcement-publisher
+    image: bagiasn/announcement-publisher
     container_name: announcement-publisher
     build:
       context: ./announcement/publisher
