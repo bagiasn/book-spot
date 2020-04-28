@@ -1,7 +1,7 @@
 version: '3.7'
 services:
   db:
-    image: bagiasn/postgres
+    image: bagiasn/postgres:1.0
     container_name: postgres
     restart: always
     environment:
@@ -17,7 +17,7 @@ services:
       - ./postgres/init:/docker-entrypoint-initdb.d
 
   redis:
-    image: bagiasn/redis
+    image: bagiasn/redis:1.0
     container_name: redis
     command: ["redis-server", "--appendonly", "yes"]
     hostname: redis
@@ -25,7 +25,7 @@ services:
       - "6379:6379"
 
   user-api:
-    image: bagiasn/user-api
+    image: bagiasn/user-api:1.0
     container_name: user
     environment:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/users
@@ -38,7 +38,7 @@ services:
       - db
 
   catalog-api:
-    image: bagiasn/catalog-api
+    image: bagiasn/catalog-api:1.0
     container_name: catalog
     environment:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/catalog
@@ -50,7 +50,7 @@ services:
       - db
 
   gateway-api:
-    image: bagiasn/gateway-api
+    image: bagiasn/gateway-api:1.0
     container_name: gateway
     environment:
       - ZUUL_ROUTES_CATALOG_URL=http://catalog-api:8090/catalog
@@ -62,13 +62,13 @@ services:
       - user-api
 
   announcement-server:
-    image: bagiasn/announcement-server
+    image: bagiasn/announcement-server:1.0
     container_name: announcement-server
     ports:
       - "12000:12000"
 
   announcement-publisher:
-    image: bagiasn/announcement-publisher
+    image: bagiasn/announcement-publisher:1.0
     container_name: announcement-publisher
     ports:
       - "8585:8585"
