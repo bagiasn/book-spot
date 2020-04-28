@@ -1,0 +1,94 @@
+version: '3.7'
+services:
+  db:
+    image: postgres:12.0-alpine
+    container_name: postgres
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: "******"
+    healthcheck:
+        test: ["CMD-SHELL", "pg_isready -U postgres"]
+        interval: 10s
+        timeout: 5s
+        retries: 5
+    ports:
+      - "5432:5432"
+    volumes: 
+      - ./postgres/init:/docker-entrypoint-initdb.d
+
+  redis:
+    image: redis:5.0.7-alpine
+    container_name: redis
+    command: ["redis-server", "--appendonly", "yes"]
+    hostname: redis
+    ports:
+      - "6379:6379"
+
+  user-api:
+    image: bookspot/user-api
+    container_name: user
+    build:
+      context: ./user
+      args:
+        - MAIN_CLASS=user.UserApplication
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/users
+      - SPRING_DATASOURCE_USERNAME=dev
+      - SPRING_DATASOURCE_PASSWORD=!QL5S7BDFRs8
+      - SPRING_REDIS_HOST=redis
+    ports:
+      - "8100:8100"
+    depends_on:
+      - db
+
+  catalog-api:
+    image: bookspot/catalog-api
+    container_name: catalog
+    build:
+      context: ./catalog
+      args:
+        - MAIN_CLASS=catalog.CatalogApplication
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/catalog
+      - SPRING_DATASOURCE_USERNAME=dev
+      - SPRING_DATASOURCE_PASSWORD=!QL5S7BDFRs8
+    ports:
+      - "8090:8090"
+    depends_on:
+      - db
+
+  gateway-api:
+    image: bookspot/gateway-api
+    container_name: gateway
+    build:
+      context: ./gateway
+      args:
+        - MAIN_CLASS=gateway.GatewayApplication
+    environment:
+      - ZUUL_ROUTES_CATALOG_URL=http://catalog-api:8090/catalog
+      - ZUUL_ROUTES_USER_URL=http://user-api:8100/user
+    ports:
+      - "8080:8080"
+    depends_on:
+      - catalog-api
+      - user-api
+
+  announcement-server:
+    image: bookspot/announcement-server
+    container_name: announcement-server
+    build:
+      context: ./announcement/server
+    ports:
+      - "12000:12000"
+
+  announcement-publisher:
+    image: bookspot/announcement-publisher
+    container_name: announcement-publisher
+    build:
+      context: ./announcement/publisher
+      args:
+        - SERVER_URI=announcement-server:12000
+    ports:
+      - "8585:8585"
+    depends_on:
+      - announcement-server
