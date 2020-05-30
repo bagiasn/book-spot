@@ -8,7 +8,7 @@ pipeline {
                     }
                }
                steps {
-                    sh './gradle build -x test'
+                    sh './gradlew build -x test'
                     sh 'echo "Build completed"'
                }
           }
@@ -19,7 +19,7 @@ pipeline {
                     }
                }
                steps {
-                    sh './gradle test'
+                    sh './gradlew test'
                     sh 'echo "Testing completed"'
                }
           }
