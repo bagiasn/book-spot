@@ -404,23 +404,35 @@ function showBook(book) {
     let bookId = bookUri.substring(bookUri.lastIndexOf('/')  + 1);
 
     let ratingBar = $('.actions .rating');
-    ratingBar
-        .rating('set rating', book.rating)
-        .popup({
-            on: 'click'
-        })
-        .api({
-            action: 'rate book',
-            method: 'PATCH',
-            contentType: 'application/json',
-            urlData: {
-                id: bookId
-            },
-            beforeSend: function(settings) {
-                settings.data = JSON.stringify({rating: parseInt($(this).rating('get rating'))});
-                return settings;
-            }
-        });
+
+    let token = localStorage.getItem('userToken');
+    let username = localStorage.getItem('userEmail');
+
+    if (token !== null && token !== '' && username !== null && username !== '') {
+        ratingBar
+            .rating('set rating', book.rating)
+            .rating('enable')
+            .popup({
+                on: 'click'
+            })
+            .api({
+                action: 'rate book',
+                method: 'PATCH',
+                contentType: 'application/json',
+                urlData: {
+                    id: bookId
+                },
+                beforeSend: function(settings) {
+                    settings.data = JSON.stringify({rating: parseInt($(this).rating('get rating'))});
+                    return settings;
+                }
+            });
+    } else {
+        ratingBar
+            .rating('set rating', book.rating)
+            .rating('disable')
+            .popup('destroy');
+    }
 
     $('.ui.modal.book')
         .modal({
