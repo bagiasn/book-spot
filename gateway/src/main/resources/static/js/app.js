@@ -313,6 +313,12 @@ function onLoginSuccess(response) {
     $('.ui.menu .login').hide();
     $('.ui.menu .sign-up').hide();
     $('.ui.menu .logout').show();
+
+
+    setTimeout(
+        function() {
+            $('.ui.modal.login').modal('hide');
+        }, 1000);
 }
 
 function onLogoutSuccess() {
