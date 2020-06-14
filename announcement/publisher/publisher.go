@@ -103,5 +103,11 @@ func main() {
 
 	http.HandleFunc("/listen", messageBus.publishAnnouncements)
 
-	log.Fatal(http.ListenAndServe(*addr, nil))
+	if _,err := os.Stat("./publisher.crt"); err == nil {
+		log.Info("Loading certificate")
+		log.Fatal(http.ListenAndServeTLS(*addr, "publisher.crt", "publisher.key", nil))
+	} else {
+		log.Info("Using unsecure protocol (ws)")
+		log.Fatal(http.ListenAndServe(*addr, nil))
+	}
 }
