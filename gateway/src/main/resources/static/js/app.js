@@ -271,7 +271,7 @@ function loadBooks(payload) {
 
         // Populate element content
         header.innerText = book.title;
-        img.src = `http://covers.openlibrary.org/b/id/${book.cover_id}-M.jpg`;
+        img.src = `https://covers.openlibrary.org/b/id/${book.cover_id}-M.jpg`;
         img.alt = 'Book cover image';
         meta.innerText = book._embedded.category.name;
         extra.innerText = 'Rating: ';
@@ -393,7 +393,7 @@ function clearBooks() {
 
 function showBook(book) {
     let modalImg = document.getElementById("modal-img");
-    modalImg.src = `http://covers.openlibrary.org/b/id/${book.cover_id}-M.jpg`;
+    modalImg.src = `https://covers.openlibrary.org/b/id/${book.cover_id}-M.jpg`;
     let modalDesc = document.getElementById("modal-desc");
     modalDesc.innerText = book.description;
     let modalHeader = document.getElementById("modal-header");
