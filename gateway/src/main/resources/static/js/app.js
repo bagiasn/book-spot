@@ -24,7 +24,7 @@ window.onload = function() {
         'logout'   : 'api/user/logout'
     };
 
-    let webSocket = new WebSocket('ws://localhost:8585/listen');
+    let webSocket = new WebSocket(location.protocol.replace(/^http/, 'ws') + '//' +  location.hostname + ':8585/listen');
 
     webSocket.onmessage = function (event) {
         $('.ui.announcement span').fadeOut(function() {
